@@ -1,79 +1,97 @@
+#include <iostream>
 #include <SDL.h>
-#include <SDL_image.h>
-#include <cmath>
 
-const int WINDOW_WIDTH = 1280;
-const int WINDOW_HEIGHT = 720;
+const int WINDOW_WIDTH = 1600;
+const int WINDOW_HEIGHT = 1200;
+
 const int BALL_SIZE = 64;
-const int BALL_SPEED = 1;
+const int BALL_SPEED = 5;
 
 int main(int argc, char* argv[])
 {
-    // Initialize SDL
     SDL_Init(SDL_INIT_VIDEO);
 
-    // Initialize SDL_image library
-    IMG_Init(IMG_INIT_PNG);
+    SDL_Window* window = SDL_CreateWindow("Ball",
+        SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED,
+        WINDOW_WIDTH, WINDOW_HEIGHT, SDL_WINDOW_SHOWN);
+    SDL_Renderer* renderer = SDL_CreateRenderer(window, -1,
+        SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
 
-    // Create a window
-    SDL_Window* window = SDL_CreateWindow("Moving Ball", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, WINDOW_WIDTH, WINDOW_HEIGHT, SDL_WINDOW_SHOWN);
+    SDL_Surface* ballSurface = SDL_LoadBMP("image.bmp");
+    SDL_Texture* ballTexture = SDL_CreateTextureFromSurface(renderer, ballSurface);
+    SDL_FreeSurface(ballSurface);
 
-    // Create a renderer
-    SDL_Renderer* renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED);
+    SDL_Rect ballRect;
+    ballRect.x = (WINDOW_WIDTH - BALL_SIZE) / 2;
+    ballRect.y = (WINDOW_HEIGHT - BALL_SIZE) / 2;
+    ballRect.w = BALL_SIZE;
+    ballRect.h = BALL_SIZE;
 
-    // Load the image
-    SDL_Surface* imageSurface = IMG_Load("ball.png");
-    SDL_Texture* ballTexture = SDL_CreateTextureFromSurface(renderer, imageSurface);
+    bool moving = false;
+    bool rotating = false;
 
-    // Set the initial position of the ball
-    SDL_Rect ballRect = { 0, WINDOW_HEIGHT / 2 - BALL_SIZE / 2, BALL_SIZE, BALL_SIZE };
+    int rotationAngle = 0;
 
-    // Set the initial direction of the ball
-    int direction = 1;
-
-    // Main loop
-    bool quit = false;
-    while (!quit)
+    SDL_Event event;
+    bool running = true;
+    while (running)
     {
-        // Handle events
-        SDL_Event event;
         while (SDL_PollEvent(&event))
         {
-            if (event.type == SDL_QUIT)
+            switch (event.type)
             {
-                quit = true;
+            case SDL_QUIT:
+                running = false;
+                break;
+            case SDL_KEYDOWN:
+                switch (event.key.keysym.sym)
+                {
+                case SDLK_RIGHT:
+                    moving = true;
+                    rotating = true;
+                    break;
+                }
+                break;
+            case SDL_KEYUP:
+                switch (event.key.keysym.sym)
+                {
+                case SDLK_RIGHT:
+                    moving = false;
+                    rotating = false;
+                    break;
+                }
+                break;
             }
         }
 
-        // Move the ball
-        ballRect.x += direction * BALL_SPEED;
-
-        // Check if the ball hits the borders
-        if (ballRect.x < 0 || ballRect.x > WINDOW_WIDTH - BALL_SIZE)
+        if (moving)
         {
-            direction = -direction;
+            ballRect.x += BALL_SPEED;
+            if (ballRect.x >= WINDOW_WIDTH - BALL_SIZE)
+            {
+                ballRect.x = WINDOW_WIDTH - BALL_SIZE;
+                moving = false;
+                rotating = false;
+            }
         }
 
-        // Calculate the rotation angle based on the ball's direction
-        double angle = direction > 0 ? 0 : M_PI;
+        if (rotating)
+        {
+            rotationAngle += BALL_SPEED;
+            if (rotationAngle >= 360)
+            {
+                rotationAngle -= 360;
+            }
+        }
 
-        // Clear the screen
-        SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
         SDL_RenderClear(renderer);
-
-        // Render the ball texture with rotation
-        SDL_RenderCopyEx(renderer, ballTexture, NULL, &ballRect, angle, NULL, SDL_FLIP_NONE);
-
-        // Update the screen
+        SDL_RenderCopyEx(renderer, ballTexture, NULL, &ballRect, rotationAngle, NULL, SDL_FLIP_NONE);
         SDL_RenderPresent(renderer);
     }
 
-    // Clean up
     SDL_DestroyTexture(ballTexture);
-    SDL_FreeSurface(imageSurface);
     SDL_DestroyRenderer(renderer);
     SDL_DestroyWindow(window);
-    IMG_Quit();
     SDL_Quit();
 
     return 0;

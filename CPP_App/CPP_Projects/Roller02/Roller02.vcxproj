@@ -24,6 +24,7 @@
   <ItemGroup>
     <Image Include="ball.png" />
     <Image Include="concour pic.jpg" />
+    <Image Include="image.bmp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>
