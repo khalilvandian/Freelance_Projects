@@ -1,0 +1,15 @@
+﻿  main.cpp
+B:\Projects\Freelance Projects\CPP_App\CPP_Projects\Ball\main.cpp(18,23): warning C4244: 'argument': conversion from 'const float' to 'int', possible loss of data
+B:\Projects\Freelance Projects\CPP_App\CPP_Projects\Ball\main.cpp(18,9): warning C4244: 'argument': conversion from 'const float' to 'int', possible loss of data
+B:\Projects\Freelance Projects\CPP_App\CPP_Projects\Ball\main.cpp(100,42): warning C4305: '+=': truncation from 'double' to 'float'
+B:\Projects\Freelance Projects\CPP_App\CPP_Projects\Ball\main.cpp(112,46): warning C4305: '-=': truncation from 'double' to 'float'
+B:\Projects\Freelance Projects\CPP_App\CPP_Projects\Ball\main.cpp(142,23): warning C4244: 'initializing': conversion from 'float' to 'int', possible loss of data
+B:\Projects\Freelance Projects\CPP_App\CPP_Projects\Ball\main.cpp(143,23): warning C4244: 'initializing': conversion from 'float' to 'int', possible loss of data
+B:\Projects\Freelance Projects\CPP_App\CPP_Projects\Ball\main.cpp(163,38): warning C4305: '+=': truncation from 'double' to 'float'
+B:\Projects\Freelance Projects\CPP_App\CPP_Projects\Ball\main.cpp(171,42): warning C4305: '-=': truncation from 'double' to 'float'
+B:\Projects\Freelance Projects\CPP_App\CPP_Projects\Ball\main.cpp(216,17): warning C4804: '+=': unsafe use of type 'bool' in operation
+  Generating code
+  Previous IPDB not found, fall back to full compilation.
+  All 1 functions were compiled because no usable IPDB/IOBJ from previous compilation was found.
+  Finished generating code
+  Ball.vcxproj -> B:\Projects\Freelance Projects\CPP_App\CPP_Projects\x64\Release\Ball.exe
